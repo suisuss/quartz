@@ -40,7 +40,7 @@ jobs:
       - name: Copy content
         run: |
           # Only copy plaintext markdown files (skip git-crypt encrypted blobs)
-          find "/tmp/vault/Knowledge Base" "/tmp/vault/Files" -type f | while read -r f; do
+          find "/tmp/vault/Writing" "/tmp/vault/Knowledge Base" "/tmp/vault/Files" -type f | while read -r f; do
             if file "$f" | grep -q "text"; then
               dest="content/${f#/tmp/vault/}"
               mkdir -p "$(dirname "$dest")"
