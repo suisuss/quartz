@@ -29,17 +29,26 @@ jobs:
 
       - name: Clone vault
         run: |
-          git clone --depth 1 --filter=blob:none --sparse \
+          git clone --depth 1 --no-checkout \
             https://x-access-token:${{ secrets.VAULT_TOKEN }}@github.com/suisuss/.obsidian.git \
             /tmp/vault
           cd /tmp/vault
+          git sparse-checkout init --cone
           git sparse-checkout set "Writing" "Knowledge Base" "Files"
+          git checkout
 
       - name: Copy content
         run: |
-          cp -r "/tmp/vault/Writing" content/
-          cp -r "/tmp/vault/Knowledge Base" content/
-          cp -r /tmp/vault/Files content/
+          # Only copy plaintext markdown files (skip git-crypt encrypted blobs)
+          find "/tmp/vault/Knowledge Base" "/tmp/vault/Files" -type f | while read -r f; do
+            if file "$f" | grep -q "text"; then
+              dest="content/${f#/tmp/vault/}"
+              mkdir -p "$(dirname "$dest")"
+              cp "$f" "$dest"
+            fi
+          done
+          echo "Content files copied:"
+          find content -type f -name "*.md" | head -50
 
       - name: Setup Node
         uses: actions/setup-node@v6
