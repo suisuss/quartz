@@ -6,5 +6,5 @@ Welcome. This is a collection of my writing and research notes, published from m
 
 Browse by section:
 
-- [Writing](./Writing/) - Essays, posts, and publications
-- [Knowledge Base](./Knowledge%20Base/) - Research notes and concepts
+- [Writing](/quartz/Writing/) - Essays, posts, and publications
+- [Knowledge Base](/quartz/Knowledge-Base/) - Research notes and concepts
