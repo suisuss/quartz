@@ -43,11 +43,13 @@ jobs:
           # Copy index.md directly
           cp /tmp/vault/index.md content/index.md
           find "/tmp/vault/Writing" "/tmp/vault/Knowledge Base" "/tmp/vault/Files" -type f | while read -r f; do
-            if file "$f" | grep -q "text"; then
-              dest="content/${f#/tmp/vault/}"
-              mkdir -p "$(dirname "$dest")"
-              cp "$f" "$dest"
+            # Skip git-crypt encrypted files (magic bytes: \0GITCRYPT)
+            if head -c 9 "$f" 2>/dev/null | grep -q "GITCRYPT"; then
+              continue
             fi
+            dest="content/${f#/tmp/vault/}"
+            mkdir -p "$(dirname "$dest")"
+            cp "$f" "$dest"
           done
           echo "Content files copied:"
           find content -type f -name "*.md" | head -50
