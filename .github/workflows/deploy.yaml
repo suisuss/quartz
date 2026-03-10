@@ -34,12 +34,14 @@ jobs:
             /tmp/vault
           cd /tmp/vault
           git sparse-checkout init --cone
-          git sparse-checkout set "Writing" "Knowledge Base" "Files"
+          git sparse-checkout set "Writing" "Knowledge Base" "Files" "index.md"
           git checkout
 
       - name: Copy content
         run: |
           # Only copy plaintext markdown files (skip git-crypt encrypted blobs)
+          # Copy index.md directly
+          cp /tmp/vault/index.md content/index.md
           find "/tmp/vault/Writing" "/tmp/vault/Knowledge Base" "/tmp/vault/Files" -type f | while read -r f; do
             if file "$f" | grep -q "text"; then
               dest="content/${f#/tmp/vault/}"
