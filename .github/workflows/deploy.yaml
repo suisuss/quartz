@@ -34,7 +34,7 @@ jobs:
             /tmp/vault
           cd /tmp/vault
           git sparse-checkout init --cone
-          git sparse-checkout set "Writing" "Knowledge Base" "Files" "index.md"
+          git sparse-checkout set "Writing" "Knowledge Base" "Files" "About Me" "index.md"
           git checkout
 
       - name: Copy content
@@ -42,7 +42,7 @@ jobs:
           # Only copy plaintext markdown files (skip git-crypt encrypted blobs)
           # Copy index.md directly
           cp /tmp/vault/index.md content/index.md
-          find "/tmp/vault/Writing" "/tmp/vault/Knowledge Base" "/tmp/vault/Files" -type f | while read -r f; do
+          find "/tmp/vault/Writing" "/tmp/vault/Knowledge Base" "/tmp/vault/Files" "/tmp/vault/About Me" -type f | while read -r f; do
             # Skip git-crypt encrypted files (magic bytes: \0GITCRYPT)
             if head -c 9 "$f" 2>/dev/null | grep -q "GITCRYPT"; then
               continue
